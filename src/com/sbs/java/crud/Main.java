@@ -1,5 +1,6 @@
 package com.sbs.java.crud;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -59,13 +60,19 @@ public class Main {
 						break;
 					}
 				}
+				SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+				String format_time1 = format1.format(System.currentTimeMillis());
+
+				System.out.println(format_time1);
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 					continue;
+
 				}
 				System.out.printf("번호 : %d\n", foundArticle.id);
-				System.out.printf("날짜 : 2021-12-12 12:12:12\n");
+				System.out.printf("시간 : " + format_time1 + "\n");
 				System.out.printf("제목 : %s\n", foundArticle.title);
 				System.out.printf("내용 : %s\n", foundArticle.body);
 			} else if (command.startsWith("article delete ")) {
@@ -92,9 +99,36 @@ public class Main {
 				// id : 1 2 3
 				articles.remove(foundIndex);
 				System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
+			} else if (command.startsWith("article modify ")) {
+				String[] commendBits = command.split(" ");
+				int id = Integer.parseInt(commendBits[2]);
+
+				Article foundArticle = null;
+
+				for (int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+					if (article.id == id) {
+						foundArticle = article;
+						break;
+					}
 			}
 
-			else {
+				if (foundArticle == null) {
+					System.out.println("없는 게시글 입니다.");
+					continue;
+				}
+
+				System.out.printf("제목 : ");
+				String title = sc.nextLine();
+				System.out.printf("내용 : ");
+				String body = sc.nextLine();
+
+				foundArticle.title = title;
+				foundArticle.body = body;
+
+				System.out.printf("%d번 게시글이 수정되었습니다.\n", id);
+
+			} else {
 				System.out.printf("%s(은)는 존재하지 않는 명령어입니다.\n", command);
 			}
 		}
